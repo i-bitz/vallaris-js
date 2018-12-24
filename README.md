@@ -1,4 +1,4 @@
-# Vallaris Map Javascript
+# Vallaris Map JavaScript API
 
 Vallaris Map Javascript API is the great set of APIs for building map application, rich data oriented application and Geographical based informative application.
 
