@@ -25,7 +25,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/atom-one-light.min.css">
-    <title>Vallaris Map JavaScript API Simple Map</title>
+    <title>Vallaris Map JavaScript API Draw polygon</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-primary"><a class="navbar-brand"><img src="images/vallaris-white.svg" height="30"></a></nav>
@@ -66,8 +66,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col content-container">
-            <h1 class="display-4 text-success">Introduction</h1>
-            <p class="text-muted">Get started with Vallaris JavaScript API, the great set of APIs for building map application, rich data oriented application and Geographical based informative application.</p>
+            <h1 class="display-4 text-success">Measure</h1>
+            <p class="text-muted">The Measure tool lets you measure lines and areas on the map. It can help to analyze gis related data.</p>
             <div class="card">
               <div class="card-body">
                 <ul class="nav nav-pills mb-3 float-right" id="pills-tab" role="tablist">
@@ -77,15 +77,15 @@
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
                     <div class="clearfix d-md-none"> </div>
-                    <h4 class="card-title text-info">Basemap</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple map example</h6><br>
-                    <p class="card-text">The term basemap is see often in GIS and refers to a collection of GIS data and/or orthorectified imagery that form the background setting for a map. The function of the basemap is to provide background detail necessary to orient the location of the map. Basemaps also add to the aesthetic appeal of a map. A basemap provides a user with context for a map. You can add information to a basemap by overlaying other information on top of it. Basemaps contain reference information that may provide different geospatial information based on what the cartographer is trying to communicate.
+                    <h4 class="card-title text-info">Geo tools</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Measure length/area</h6><br>
+                    <p class="card-text">Developer can use this tool to draw a line or polygon on the map and get its length or area, or he can click directly on a feature and get measurement information. Measurements are displayed on the dialog box, so it is easy to use them into other applications as well.
                       <div class="clearfix">&nbsp;</div>
                       <pre class="border"><code class="html p-3">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta charset="utf-8"&gt;
-        &lt;title&gt;Simple base map&lt;/title&gt;
+        &lt;title&gt;Draw polygon&lt;/title&gt;
         &lt;link rel="stylesheet" href="https://cdn.vallaris.spacecss/vallaris.css"&gt;
         &lt;style&gt;
             .map, body, html {
@@ -113,7 +113,7 @@
                   </div>
                   <div class="tab-pane fade" id="pills-output" role="tabpanel" aria-labelledby="pills-output-tab">
                     <h4 class="card-title text-info">Example output</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple base map in load</h6><br>
+                    <h6 class="card-subtitle mb-2 text-muted">Measure length/area in load</h6><br>
                     <div class="map" id="map"></div>
                   </div>
                 </div>
@@ -133,6 +133,5 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="js/example/simple.js"></script>
   </body>
 </html>
