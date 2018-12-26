@@ -1,4 +1,4 @@
-loadScript('/js/ol.js', mapInit);
+loadScript('js/ol.js', mapInit);
 // loadScript('/js/mapbox-streets-v6-style.js', mapboxVectorTile);
 
 window.vallaris = window.vallaris || {};
