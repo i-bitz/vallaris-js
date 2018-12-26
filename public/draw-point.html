@@ -102,7 +102,10 @@
         &lt;script type="text/javascript"&gt;
             var setting = {
                 center: [100.4833, 13.7500],
-                zoom: 6
+                zoom: 6,
+                drawing: {
+                    type: 'point'
+                }
             };
 
             new vallaris.maps.Map(setting);
@@ -133,5 +136,6 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/example/drawing-point.js"></script>
   </body>
 </html>

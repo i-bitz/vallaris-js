@@ -42,6 +42,12 @@
     left: 6px;
 }
 
+.vallaris-drawing {
+    position: absolute;
+    top: 80px;
+    left: 6px;
+}
+
 *:focus {
     outline: 0 !important;
 }
@@ -53,9 +59,10 @@
     cursor: pointer; /* Pointer/hand icon */
     width: 2rem; /* Set a width if needed */
     display: block; /* Make the buttons appear below each other */
-    font-weight: bold;
-    font-size: 1.2rem;
+    /* font-weight: bold;
+    font-size: 1.2rem; */
     margin: 0;
+    padding: 4px;
 }
 
 .vallris-btn-group button:not(:last-child) {

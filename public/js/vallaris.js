@@ -1,5 +1,5 @@
-loadScript('js/ol.js', mapInit);
-// loadScript('js/mapbox-streets-v6-style.js', mapboxVectorTile);
+loadScript('/js/ol.js', mapInit);
+// loadScript('/js/mapbox-streets-v6-style.js', mapboxVectorTile);
 
 window.vallaris = window.vallaris || {};
 vallaris.maps = vallaris.maps || {};
@@ -32,6 +32,7 @@ function mapInit() {
     attributionControl();
     zoomControl();
     infoControl();
+    drawingControl();
 
     view = new ol.View({
         center: ol.proj.fromLonLat([100.4833, 13.7500]),
@@ -105,13 +106,13 @@ function zoomControl() {
         zoomInButton.id = 'ZoomIn';
         zoomInButton.type = 'button';
         zoomInButton.className = 'vallaris-btn';
-        zoomInButton.innerHTML = '+';
+        zoomInButton.innerHTML = '<i class="fas fa-plus"></i>';
 
         var zoomOutButton = document.createElement('button');
         zoomOutButton.id = 'ZoomOut';
         zoomOutButton.type = 'button';
         zoomOutButton.className = 'vallaris-btn';
-        zoomOutButton.innerHTML = '-';
+        zoomOutButton.innerHTML = '<i class="fas fa-minus"></i>';
 
         var vallarisZoomIn = function(e) {
             e.preventDefault();
@@ -165,6 +166,87 @@ function infoControl() {
     ol.inherits(app.InfoControl, ol.control.Control);
 }
 
+function drawingControl() {
+    app.DrawingControl = function(opt_options, setting) {
+        var options = opt_options || {};
+
+        var element = document.createElement('div');
+        element.id = 'drawing';
+        element.className = 'vallaris-drawing vallris-btn-group ol-unselectable vallaris-control';
+        // element.innerHTML = '<div class="btn-group btn-group-toggle" data-toggle="buttons">\
+        //   <label class="btn btn-secondary active">\
+        //     <input type="radio" name="drawingOption" id="Point" autocomplete="off" checked> Active\
+        //   </label>\
+        //   <label class="btn btn-secondary">\
+        //     <input type="radio" name="drawingOption" id="LineString" autocomplete="off"> Radio\
+        //   </label>\
+        //   <label class="btn btn-secondary">\
+        //     <input type="radio" name="drawingOption" id="Polygon" autocomplete="off"> Radio\
+        //   </label>\
+        // </div>';
+
+        var featurePointButton = document.createElement('button');
+        featurePointButton.id = 'Point';
+        featurePointButton.type = 'button';
+        featurePointButton.className = 'vallaris-btn';
+        featurePointButton.innerHTML = '<i class="fas fa-map-marker-alt"></i>';
+
+        var featureLineStringButton = document.createElement('button');
+        featureLineStringButton.id = 'LineString';
+        featureLineStringButton.type = 'button';
+        featureLineStringButton.className = 'vallaris-btn';
+        featureLineStringButton.innerHTML = '<i class="fas fa-route"></i>';
+
+        var featurePolygonButton = document.createElement('button');
+        featurePolygonButton.id = 'Polygon';
+        featurePolygonButton.type = 'button';
+        featurePolygonButton.className = 'vallaris-btn';
+        featurePolygonButton.innerHTML = '<i class="fas fa-draw-polygon"></i>';
+
+        var featureNoneButton = document.createElement('button');
+        featureNoneButton.id = 'None';
+        featureNoneButton.type = 'button';
+        featureNoneButton.className = 'vallaris-btn';
+        featureNoneButton.innerHTML = '<i class="fas fa-hand-paper"></i>';
+
+        if (setting.drawing.type) {
+            var drawingType = setting.drawing.type;
+
+            switch (drawingType) {
+                case 'features':
+                    element.appendChild(featurePointButton);
+                    element.appendChild(featureLineStringButton);
+                    element.appendChild(featurePolygonButton);
+                    element.appendChild(featureNoneButton);
+                    break;
+                case 'point':
+                    element.appendChild(featurePointButton);
+                    element.appendChild(featureNoneButton);
+                    break;
+                case 'line':
+                    element.appendChild(featureLineStringButton);
+                    element.appendChild(featureNoneButton);
+                    break;
+                case 'polygon':
+                    element.appendChild(featurePolygonButton);
+                    element.appendChild(featureNoneButton);
+                    break;
+                default:
+                    return;
+            }
+
+            ol.control.Control.call(this, {
+                element: element,
+                target: options.target
+            });
+        }
+    };
+
+    ol.inherits(app.DrawingControl, ol.control.Control);
+}
+
+// document.getElementById('Point').onclick = function() {alert('Hello')};
+
 function mousePosition() {
     var mousePosition = new ol.control.MousePosition({
         coordinateFormat: ol.coordinate.createStringXY(2),
@@ -188,6 +270,10 @@ vallaris.maps.Map = function(setting) {
 
             if (setting.vector) {
                 vallaris.maps.DatasetVectorTile(setting);
+            }
+
+            if (setting.drawing) {
+                vallaris.maps.Drawing(setting);
             }
         }
     }
@@ -242,6 +328,72 @@ vallaris.maps.DatasetVectorTile = function (setting) {
         var tileBbox = ol.proj.transformExtent(setting.vector.bbox, 'EPSG:4326', 'EPSG:3857');
         map.getView().fit(tileBbox, map.getSize());
     }
+}
 
+vallaris.maps.Drawing = function (setting) {
+    if (setting.drawing.type) {
+        map.addControl(new app.DrawingControl(null, setting));
 
+        var drawingPoint = document.getElementById('Point');
+        var drawingLineString = document.getElementById('LineString');
+        var drawingPolygon = document.getElementById('Polygon');
+        var resetNone = document.getElementById('None');
+        var source = new ol.source.Vector({wrapX: false});
+
+        var vector = new ol.layer.Vector({
+          source: source
+        });
+
+        map.addLayer(vector);
+
+        if (drawingPoint) {
+            var pointTool = new ol.interaction.Draw({
+                source: source,
+                type: 'Point'
+            });
+
+            drawingPoint.onclick = function () {
+                resetNone.click();
+                map.addInteraction(pointTool);
+            }
+        }
+
+        if (drawingLineString) {
+            var lineTool = new ol.interaction.Draw({
+                source: source,
+                type: 'LineString'
+            });
+
+            drawingLineString.onclick = function () {
+                resetNone.click();
+                map.addInteraction(lineTool);
+            }
+        }
+
+        if (drawingPolygon) {
+            var polygonTool = new ol.interaction.Draw({
+                source: source,
+                type: 'Polygon'
+            });
+
+            drawingPolygon.onclick = function () {
+                resetNone.click();
+                map.addInteraction(polygonTool);
+            }
+        }
+
+        resetNone.onclick = function () {
+            map.removeInteraction(pointTool);
+            map.removeInteraction(lineTool);
+            map.removeInteraction(polygonTool);
+        }
+    }
+}
+
+vallaris.maps.GeoTools = function (setting) {
+    map.addControl(new mousePosition());
+}
+
+vallaris.maps.MapServices = function (setting) {
+    map.addControl(new mousePosition());
 }
