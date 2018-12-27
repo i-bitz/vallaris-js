@@ -9,6 +9,8 @@ var app = window.app;
 
 var map;
 var view;
+var source;
+var vector;
 
 function loadScript(src, callback) {
     var s,
@@ -57,6 +59,11 @@ function mapInit() {
             new app.ZoomControl(),
             new app.InfoControl()
         ])
+    });
+
+    source = new ol.source.Vector({wrapX: false});
+    vector = new ol.layer.Vector({
+      source: source
     });
 
     window.onresize = function() {
@@ -173,17 +180,6 @@ function drawingControl() {
         var element = document.createElement('div');
         element.id = 'drawing';
         element.className = 'vallaris-drawing vallris-btn-group ol-unselectable vallaris-control';
-        // element.innerHTML = '<div class="btn-group btn-group-toggle" data-toggle="buttons">\
-        //   <label class="btn btn-secondary active">\
-        //     <input type="radio" name="drawingOption" id="Point" autocomplete="off" checked> Active\
-        //   </label>\
-        //   <label class="btn btn-secondary">\
-        //     <input type="radio" name="drawingOption" id="LineString" autocomplete="off"> Radio\
-        //   </label>\
-        //   <label class="btn btn-secondary">\
-        //     <input type="radio" name="drawingOption" id="Polygon" autocomplete="off"> Radio\
-        //   </label>\
-        // </div>';
 
         var featurePointButton = document.createElement('button');
         featurePointButton.id = 'Point';
@@ -244,8 +240,6 @@ function drawingControl() {
 
     ol.inherits(app.DrawingControl, ol.control.Control);
 }
-
-// document.getElementById('Point').onclick = function() {alert('Hello')};
 
 function mousePosition() {
     var mousePosition = new ol.control.MousePosition({
@@ -334,15 +328,11 @@ vallaris.maps.Drawing = function (setting) {
     if (setting.drawing.type) {
         map.addControl(new app.DrawingControl(null, setting));
 
+        var drawingFeature = [];
         var drawingPoint = document.getElementById('Point');
         var drawingLineString = document.getElementById('LineString');
         var drawingPolygon = document.getElementById('Polygon');
         var resetNone = document.getElementById('None');
-        var source = new ol.source.Vector({wrapX: false});
-
-        var vector = new ol.layer.Vector({
-          source: source
-        });
 
         map.addLayer(vector);
 
@@ -356,6 +346,10 @@ vallaris.maps.Drawing = function (setting) {
                 resetNone.click();
                 map.addInteraction(pointTool);
             }
+
+            pointTool.on('drawend', (evt) => {
+                drawingAction(evt.feature);
+            }, this);
         }
 
         if (drawingLineString) {
@@ -368,6 +362,10 @@ vallaris.maps.Drawing = function (setting) {
                 resetNone.click();
                 map.addInteraction(lineTool);
             }
+
+            lineTool.on('drawend', (evt) => {
+                drawingAction(evt.feature);
+            }, this);
         }
 
         if (drawingPolygon) {
@@ -380,12 +378,23 @@ vallaris.maps.Drawing = function (setting) {
                 resetNone.click();
                 map.addInteraction(polygonTool);
             }
+
+            polygonTool.on('drawend', (evt) => {
+                drawingAction(evt.feature);
+            }, this);
         }
 
         resetNone.onclick = function () {
             map.removeInteraction(pointTool);
             map.removeInteraction(lineTool);
             map.removeInteraction(polygonTool);
+        }
+
+        drawingAction = function (feature) {
+            var currentFeature = feature.getGeometry().getCoordinates();
+            drawingFeature.push(currentFeature);
+            console.log(drawingFeature);
+            resetNone.onclick();
         }
     }
 }
