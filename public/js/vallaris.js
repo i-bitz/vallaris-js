@@ -345,15 +345,23 @@ vallaris.maps.Drawing = function (setting) {
 
         map.addLayer(vector);
 
+        var modify = new ol.interaction.Modify({source: source});
+        map.addInteraction(modify);
+
         if (drawingPoint) {
             var pointTool = new ol.interaction.Draw({
                 source: source,
                 type: 'Point'
             });
 
+            var pointSnap = new ol.interaction.Snap({
+                source: source
+            });
+
             drawingPoint.onclick = function () {
                 resetNone.click();
                 map.addInteraction(pointTool);
+                map.addInteraction(pointSnap);
             }
 
             pointTool.on('drawend', (evt) => {
@@ -367,9 +375,14 @@ vallaris.maps.Drawing = function (setting) {
                 type: 'LineString'
             });
 
+            var lineSnap = new ol.interaction.Snap({
+                source: source
+            });
+
             drawingLineString.onclick = function () {
                 resetNone.click();
                 map.addInteraction(lineTool);
+                map.addInteraction(lineSnap);
             }
 
             lineTool.on('drawend', (evt) => {
@@ -383,9 +396,14 @@ vallaris.maps.Drawing = function (setting) {
                 type: 'Polygon'
             });
 
+            var polygonSnap = new ol.interaction.Snap({
+                source: source
+            });
+
             drawingPolygon.onclick = function () {
                 resetNone.click();
                 map.addInteraction(polygonTool);
+                map.addInteraction(polygonSnap);
             }
 
             polygonTool.on('drawend', (evt) => {
@@ -397,13 +415,44 @@ vallaris.maps.Drawing = function (setting) {
             map.removeInteraction(pointTool);
             map.removeInteraction(lineTool);
             map.removeInteraction(polygonTool);
+
+            map.removeInteraction(pointSnap);
+            map.removeInteraction(lineSnap);
+            map.removeInteraction(polygonSnap);
         }
 
         drawingAction = function (feature) {
-            var currentFeature = feature.getGeometry().getCoordinates();
+            switch (feature.getGeometry().getType()) {
+                case 'Point':
+                    var coords = ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326');
+                    break;
+                case 'LineString':
+                    var
+                    break;
+                case 'Polygon':
+
+                    break;
+                default:
+                    return;
+            }
+
+            // var currentFeature = feature.getGeometry().getCoordinates();
+            // var currentFeature = ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326');
+            // var currentFeature = {
+            //     "type": "Feature",
+            //     "properties": {},
+            //     "geometry": {
+            //         "type": feature.getGeometry().getType(),
+            //         "coordinates": ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')
+            //     }
+            // }
+
             drawingFeature.push(currentFeature);
-            console.log(drawingFeature);
             resetNone.onclick();
+        }
+
+        document.getElementById('Save').onclick = function () {
+            console.log(drawingFeature);
         }
     }
 }
