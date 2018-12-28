@@ -11,6 +11,11 @@ var map;
 var view;
 var source;
 var vector;
+var drawingFeature = [];
+var drawingOutput = {
+    "type": "FeatureCollection",
+    "features": []
+};
 
 function loadScript(src, callback) {
     var s,
@@ -205,6 +210,12 @@ function drawingControl() {
         featureNoneButton.className = 'vallaris-btn';
         featureNoneButton.innerHTML = '<i class="fas fa-hand-paper"></i>';
 
+        var featureSaveButton = document.createElement('button');
+        featureSaveButton.id = 'Save';
+        featureSaveButton.type = 'button';
+        featureSaveButton.className = 'vallaris-btn';
+        featureSaveButton.innerHTML = '<i class="fas fa-save"></i>';
+
         if (setting.drawing.type) {
             var drawingType = setting.drawing.type;
 
@@ -213,23 +224,22 @@ function drawingControl() {
                     element.appendChild(featurePointButton);
                     element.appendChild(featureLineStringButton);
                     element.appendChild(featurePolygonButton);
-                    element.appendChild(featureNoneButton);
                     break;
                 case 'point':
                     element.appendChild(featurePointButton);
-                    element.appendChild(featureNoneButton);
                     break;
                 case 'line':
                     element.appendChild(featureLineStringButton);
-                    element.appendChild(featureNoneButton);
                     break;
                 case 'polygon':
                     element.appendChild(featurePolygonButton);
-                    element.appendChild(featureNoneButton);
                     break;
                 default:
                     return;
             }
+
+            element.appendChild(featureSaveButton);
+            element.appendChild(featureNoneButton);
 
             ol.control.Control.call(this, {
                 element: element,
@@ -328,7 +338,6 @@ vallaris.maps.Drawing = function (setting) {
     if (setting.drawing.type) {
         map.addControl(new app.DrawingControl(null, setting));
 
-        var drawingFeature = [];
         var drawingPoint = document.getElementById('Point');
         var drawingLineString = document.getElementById('LineString');
         var drawingPolygon = document.getElementById('Polygon');
