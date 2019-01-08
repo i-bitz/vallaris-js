@@ -411,6 +411,19 @@ vallaris.maps.Drawing = function (setting) {
             }, this);
         }
 
+        modify.on('modifyend', (evt) => {
+            var featureArray = evt.features.getArray();
+            var arrayGeom = featureArray.map(feature => {
+                return new ol.format.GeoJSON().writeFeatureObject(feature, {
+                  dataProjection: 'EPSG:4326',
+                  featureProjection: 'EPSG:3857',
+                  decimals: 7
+                });
+            });
+
+            drawingFeature = arrayGeom;
+        }, this);
+
         resetNone.onclick = function () {
             map.removeInteraction(pointTool);
             map.removeInteraction(lineTool);
@@ -422,39 +435,34 @@ vallaris.maps.Drawing = function (setting) {
         }
 
         drawingAction = function (feature) {
-            switch (feature.getGeometry().getType()) {
-                case 'Point':
-                    var coords = ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326');
-                    break;
-                case 'LineString':
-                    var
-                    break;
-                case 'Polygon':
+            var arrayGeom = new ol.format.GeoJSON().writeFeatureObject(feature, {
+              dataProjection: 'EPSG:4326',
+              featureProjection: 'EPSG:3857',
+              decimals: 7
+            });
 
-                    break;
-                default:
-                    return;
-            }
-
-            // var currentFeature = feature.getGeometry().getCoordinates();
-            // var currentFeature = ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326');
-            // var currentFeature = {
-            //     "type": "Feature",
-            //     "properties": {},
-            //     "geometry": {
-            //         "type": feature.getGeometry().getType(),
-            //         "coordinates": ol.proj.transform(feature.getGeometry().getCoordinates(), 'EPSG:3857', 'EPSG:4326')
-            //     }
-            // }
-
-            drawingFeature.push(currentFeature);
+            drawingFeature.push(arrayGeom);
             resetNone.onclick();
         }
 
         document.getElementById('Save').onclick = function () {
-            console.log(drawingFeature);
+            drawingOutput.features = drawingFeature;
+            vallaris.maps.Download('map.json', JSON.stringify(drawingOutput,null,2));
         }
     }
+}
+
+vallaris.maps.Download = function (filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
 }
 
 vallaris.maps.GeoTools = function (setting) {
