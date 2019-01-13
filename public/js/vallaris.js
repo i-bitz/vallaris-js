@@ -68,9 +68,11 @@ function mapInit() {
         ])
     });
 
-    source = new ol.source.Vector({wrapX: false});
+    source = new ol.source.Vector({
+        wrapX: false
+    });
     vector = new ol.layer.Vector({
-      source: source
+        source: source
     });
 
     window.onresize = function() {
@@ -96,8 +98,8 @@ function attributionControl() {
         var options = opt_options || {};
 
         var element = document.createElement('div');
-        element.className  = 'vallaris-attribution ol-unselectable vallaris-control';
-        element.innerHTML  = '&copy; <a href="https://vallaris.space/terms" target="_blank">Vallaris</a> map ';
+        element.className = 'vallaris-attribution ol-unselectable vallaris-control';
+        element.innerHTML = '&copy; <a href="https://vallaris.space/terms" target="_blank">Vallaris</a> map ';
         element.innerHTML += '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.';
 
         ol.control.Control.call(this, {
@@ -200,8 +202,8 @@ function baseMapControl() {
             var base_layers = setting.vector;
 
             var tilegrid = ol.tilegrid.createXYZ({
-              tileSize: 512,
-              maxZoom: 12
+                tileSize: 512,
+                maxZoom: 12
             });
 
             var Default = new ol.layer.VectorTile({
@@ -238,9 +240,9 @@ function baseMapControl() {
             for (var i in base_layers) {
                 if (base_layers.hasOwnProperty(i)) {
                     if (base_layers[i].style) {
-                        layersHTML += '<li><a href="#" id="'+base_layers[i].layer_name+'" onclick="setBaseMap(this)" data-style="'+base_layers[i].style+'">' + base_layers[i].layer_label + '</a></li>';
+                        layersHTML += '<li><a href="#" id="' + base_layers[i].layer_name + '" onclick="setBaseMap(this)" data-style="' + base_layers[i].style + '">' + base_layers[i].layer_label + '</a></li>';
                     } else {
-                        layersHTML += '<li><a href="#" id="'+base_layers[i].layer_name+'" onclick="setBaseMap(this)">' + base_layers[i].layer_label + '</a></li>';
+                        layersHTML += '<li><a href="#" id="' + base_layers[i].layer_name + '" onclick="setBaseMap(this)">' + base_layers[i].layer_label + '</a></li>';
                     }
 
                 }
@@ -358,7 +360,7 @@ function mapServiceControl() {
         //     }
         // }
 
-        console.log(setting.map_service.layers);
+        // console.log(setting.map_service.layers);
 
         var element = document.createElement('div');
         element.id = 'mapservice';
@@ -537,7 +539,7 @@ vallaris.maps.Positioning = function(setting) {
     }
 }
 
-vallaris.maps.GetFeatureInfo = function (event) {
+vallaris.maps.GetFeatureInfo = function(event) {
     var info = document.getElementById('info');
     var features = map.getFeaturesAtPixel(event.pixel);
 
@@ -560,7 +562,7 @@ vallaris.maps.GetFeatureInfo = function (event) {
     info.style.opacity = 1;
 }
 
-vallaris.maps.DatasetVectorTile = function (setting) {
+vallaris.maps.DatasetVectorTile = function(setting) {
     var tileToDisplay = new ol.layer.VectorTile({
         source: new ol.source.VectorTile({
             format: new ol.format.MVT(),
@@ -578,7 +580,7 @@ vallaris.maps.DatasetVectorTile = function (setting) {
     }
 }
 
-vallaris.maps.Drawing = function (setting) {
+vallaris.maps.Drawing = function(setting) {
     if (setting.drawing.type) {
         map.addControl(new app.DrawingControl(null, setting));
 
@@ -589,7 +591,9 @@ vallaris.maps.Drawing = function (setting) {
 
         map.addLayer(vector);
 
-        var modify = new ol.interaction.Modify({source: source});
+        var modify = new ol.interaction.Modify({
+            source: source
+        });
         map.addInteraction(modify);
 
         if (drawingPoint) {
@@ -602,7 +606,7 @@ vallaris.maps.Drawing = function (setting) {
                 source: source
             });
 
-            drawingPoint.onclick = function () {
+            drawingPoint.onclick = function() {
                 resetNone.click();
                 map.addInteraction(pointTool);
                 map.addInteraction(pointSnap);
@@ -623,7 +627,7 @@ vallaris.maps.Drawing = function (setting) {
                 source: source
             });
 
-            drawingLineString.onclick = function () {
+            drawingLineString.onclick = function() {
                 resetNone.click();
                 map.addInteraction(lineTool);
                 map.addInteraction(lineSnap);
@@ -644,7 +648,7 @@ vallaris.maps.Drawing = function (setting) {
                 source: source
             });
 
-            drawingPolygon.onclick = function () {
+            drawingPolygon.onclick = function() {
                 resetNone.click();
                 map.addInteraction(polygonTool);
                 map.addInteraction(polygonSnap);
@@ -659,16 +663,16 @@ vallaris.maps.Drawing = function (setting) {
             var featureArray = evt.features.getArray();
             var arrayGeom = featureArray.map(feature => {
                 return new ol.format.GeoJSON().writeFeatureObject(feature, {
-                  dataProjection: 'EPSG:4326',
-                  featureProjection: 'EPSG:3857',
-                  decimals: 7
+                    dataProjection: 'EPSG:4326',
+                    featureProjection: 'EPSG:3857',
+                    decimals: 7
                 });
             });
 
             drawingFeature = arrayGeom;
         }, this);
 
-        resetNone.onclick = function () {
+        resetNone.onclick = function() {
             map.removeInteraction(pointTool);
             map.removeInteraction(lineTool);
             map.removeInteraction(polygonTool);
@@ -678,25 +682,25 @@ vallaris.maps.Drawing = function (setting) {
             map.removeInteraction(polygonSnap);
         }
 
-        drawingAction = function (feature) {
+        drawingAction = function(feature) {
             var arrayGeom = new ol.format.GeoJSON().writeFeatureObject(feature, {
-              dataProjection: 'EPSG:4326',
-              featureProjection: 'EPSG:3857',
-              decimals: 7
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857',
+                decimals: 7
             });
 
             drawingFeature.push(arrayGeom);
             resetNone.onclick();
         }
 
-        document.getElementById('Save').onclick = function () {
+        document.getElementById('Save').onclick = function() {
             drawingOutput.features = drawingFeature;
-            vallaris.maps.Download('map.json', JSON.stringify(drawingOutput,null,2));
+            vallaris.maps.Download('map.json', JSON.stringify(drawingOutput, null, 2));
         }
     }
 }
 
-vallaris.maps.Download = function (filename, text) {
+vallaris.maps.Download = function(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
@@ -709,38 +713,65 @@ vallaris.maps.Download = function (filename, text) {
     document.body.removeChild(element);
 }
 
-vallaris.maps.GeoTools = function (setting) {
+vallaris.maps.GeoTools = function(setting) {
     map.addControl(new mousePosition());
 }
 
-vallaris.maps.MapServices = function (setting) {
+vallaris.maps.MapServices = function(setting) {
     if (setting.map_service.types) {
         map.addControl(new app.MapServiceControl(null, setting));
     }
 
+    var stack = 1;
+
     switch (setting.map_service.types) {
         case 'WMS':
-                console.log('WMS');
-                if (setting.map_service.info) {
-                    console.log('INFO');
-                }
+            var mapSource = new ol.layer.Tile({
+                opacity: 1,
+                source: new ol.source.TileWMS({
+                    url: 'https://water-s03.gistda.or.th/geoserver/SmallWaterArea/wms',
+                    params: {
+                        'LAYERS': 'Administrative',
+                        'TILED': true,
+                        'FORMAT': 'image/png'
+                    },
+                    projection: 'EPSG:4326',
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                })
+            });
+
+            map.getLayers().insertAt(stack, mapSource);
+
+            if (setting.map_service.info) {
+                console.log('INFO');
+            }
             break;
         case 'TMS':
-                console.log('TMS');
+            var mapSource = new ol.layer.Tile({
+                opacity: 1,
+                source: new ol.source.XYZ({
+                    url: setting.map_service.layers[0].service[0].request_url
+                })
+            });
+
+            map.getLayers().insertAt(stack, mapSource);
             break;
         default:
             return;
     }
+
+
     // map.addControl(new mousePosition());
 }
 
-vallaris.maps.BaseMapRaster = function (setting) {
+vallaris.maps.BaseMapRaster = function(setting) {
     if (setting.raster) {
         map.addControl(new app.BaseMapControl(null, setting));
     }
 }
 
-vallaris.maps.BaseMapVector = function (setting) {
+vallaris.maps.BaseMapVector = function(setting) {
     if (setting.vector) {
         map.addControl(new app.BaseMapControl(null, setting));
 
