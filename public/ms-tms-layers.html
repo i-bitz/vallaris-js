@@ -25,7 +25,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/atom-one-light.min.css">
-    <title>Vallaris Map JavaScript API Draw polygon</title>
+    <title>Vallaris Map JavaScript API Map Service TMS</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-primary"><a class="navbar-brand"><img src="images/vallaris-white.svg" height="30"></a></nav>
@@ -37,7 +37,8 @@
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link" href="index.html">Simple map</a></li>
           <li class="nav-item"><a class="nav-link" href="dataset-vector.html">Dataset vector tile</a></li>
-          <li class="nav-item"><a class="nav-link" href="dataset-raster.html">Dataset raster tile</a></li>
+          <li class="nav-item"><a class="nav-link" href="basemap-raster-tile.html">Raster tile</a></li>
+          <li class="nav-item"><a class="nav-link" href="basemap-vector-tile.html">Vector tile</a></li>
         </ul>
         <div class="clearfix">&nbsp;</div><a class="nav-link font-weight-bold" href="#">Drawing</a>
         <ul class="nav flex-column">
@@ -45,8 +46,6 @@
           <li class="nav-item"><a class="nav-link" href="draw-point.html">Draw point</a></li>
           <li class="nav-item"><a class="nav-link" href="draw-line.html">Draw line</a></li>
           <li class="nav-item"><a class="nav-link" href="draw-polygon.html">Draw polygon</a></li>
-          <li class="nav-item"><a class="nav-link" href="dataset-custom-display.html">View dataset custom fields value</a></li>
-          <li class="nav-item"><a class="nav-link" href="dataset-custom-edit.html">Edit dataset custom fields value</a></li>
         </ul>
         <div class="clearfix">&nbsp;</div><a class="nav-link font-weight-bold" href="#">Geo tools</a>
         <ul class="nav flex-column">
@@ -66,7 +65,7 @@
         <div class="row">
           <div class="col content-container">
             <h1 class="display-4 text-success">TMS Layers</h1>
-            <p class="text-muted">...</p>
+            <p class="text-muted">TMS (Tile Map Service) is a protocol for serving maps as tiles i.e. splitting the map up into a pyramid of images at multiple zoom levels.</p>
             <div class="card">
               <div class="card-body">
                 <ul class="nav nav-pills mb-3 float-right" id="pills-tab" role="tablist">
@@ -78,13 +77,13 @@
                     <div class="clearfix d-md-none"> </div>
                     <h4 class="card-title text-info">Map service</h4>
                     <h6 class="card-subtitle mb-2 text-muted">Show TMS layers</h6><br>
-                    <p class="card-text">...
+                    <p class="card-text">A Tile Map Service (TMS) provides access to cartographic maps of geo-referenced data, not direct access to the data itself. This example shows how to display TMS layer in Vallaris Map JavaScript API.
                       <div class="clearfix">&nbsp;</div>
                       <pre class="border"><code class="html p-3">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta charset="utf-8"&gt;
-        &lt;title&gt;Draw polygon&lt;/title&gt;
+        &lt;title&gt;Map Service TMS Layers&lt;/title&gt;
         &lt;link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css"&gt;
         &lt;style&gt;
             .map, body, html {
@@ -99,9 +98,29 @@
         &lt;div id="map" class="map"&gt;&lt;/div&gt;
         &lt;script type="text/javascript" src="https://cdn.vallaris.space/js/vallaris.js"&gt;&lt;/script&gt;
         &lt;script type="text/javascript"&gt;
+            var tmsLayers = [
+                {
+                    "layer_label": "Thaichote",
+                    "layer_name": "Thaichote",
+                    "layer_description": "Thaichote",
+                    "service": [
+                        {
+                            "service_name": "TMS",
+                            "service_version": "1.6.0",
+                            "request_type": "GET_MAPTILE",
+                            "request_url": "http://go-tiles1.gistda.or.th/mapproxy/wmts/thaichote/GLOBAL_WEBMERCATOR/{z}/{x}/{y}.png"
+                        }
+                    ]
+                }
+            ];
+
             var setting = {
                 center: [100.4833, 13.7500],
-                zoom: 6
+                zoom: 6,
+                map_service: {
+                    types: 'TMS',
+                    layers: tmsLayers
+                }
             };
 
             new vallaris.maps.Map(setting);
@@ -132,5 +151,6 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <script src="js/example/ms-tms-layers.js"></script>
   </body>
 </html>

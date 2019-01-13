@@ -25,7 +25,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/atom-one-light.min.css">
-    <title>Vallaris Map JavaScript API Draw Point</title>
+    <title>Vallaris Map JavaScript API Raster tile</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-primary"><a class="navbar-brand"><img src="images/vallaris-white.svg" height="30"></a></nav>
@@ -64,8 +64,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col content-container">
-            <h1 class="display-4 text-success">Points</h1>
-            <p class="text-muted">A point in geometry is a location. It has no size i.e. no width, no length and no depth. A point is shown by a dot.</p>
+            <h1 class="display-4 text-success">Raster tile</h1>
+            <p class="text-muted">A common use of raster data in a GIS is as a background display for other feature layers. Rasters representing thematic data can be derived from analyzing other data.</p>
             <div class="card">
               <div class="card-body">
                 <ul class="nav nav-pills mb-3 float-right" id="pills-tab" role="tablist">
@@ -75,15 +75,15 @@
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
                     <div class="clearfix d-md-none"> </div>
-                    <h4 class="card-title text-info">Drawing</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Draw Point</h6><br>
-                    <p class="card-text">Point data is most commonly used to represent nonadjacent features and to represent discrete data points. Points have zero dimensions, therefore you can measure neither length or area with this dataset. Examples would be schools, points of interest, and in the example below, bridge and culvert locations. Point features are also used to represent abstract points. For instance, point locations could represent city locations or place names.
+                    <h4 class="card-title text-info">Basemap</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Raster tile</h6><br>
+                    <p class="card-text">Raster provide an effective method of storing the continuity as a surface. In its simplest form, a raster consists of a matrix of cells (or pixels) organized into rows and columns (or a grid) where each cell contains a value representing information, such as temperature. Rasters are digital aerial photographs, imagery from satellites, digital pictures, or even scanned maps.
                       <div class="clearfix">&nbsp;</div>
                       <pre class="border"><code class="html p-3">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta charset="utf-8"&gt;
-        &lt;title&gt;Draw point&lt;/title&gt;
+        &lt;title&gt;Basemap raster tile&lt;/title&gt;
         &lt;link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css"&gt;
         &lt;style&gt;
             .map, body, html {
@@ -101,9 +101,23 @@
             var setting = {
                 center: [100.4833, 13.7500],
                 zoom: 6,
-                drawing: {
-                    type: 'point'
-                }
+                raster: [
+                    {
+                        "layer_label": "Open street map",
+                        "layer_name": "OSM",
+                        "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    },
+                    {
+                        "layer_label": "Black & white",
+                        "layer_name": "OSM_BW",
+                        "url": "https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                    },
+                    {
+                        "layer_label": "Vallaris Raster",
+                        "layer_name": "VallarisRaster",
+                        "url": "https://tile.i-bitz.co.th/styles/vallaris/{z}/{x}/{y}.png"
+                    }
+                ]
             };
 
             new vallaris.maps.Map(setting);
@@ -114,7 +128,7 @@
                   </div>
                   <div class="tab-pane fade" id="pills-output" role="tabpanel" aria-labelledby="pills-output-tab">
                     <h4 class="card-title text-info">Example output</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Draw point in load</h6><br>
+                    <h6 class="card-subtitle mb-2 text-muted">Dataset raster tile in load</h6><br>
                     <div class="map" id="map"></div>
                   </div>
                 </div>
@@ -134,6 +148,6 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="js/example/drawing-point.js"></script>
+    <script src="js/example/basemap-raster-tile.js"></script>
   </body>
 </html>
