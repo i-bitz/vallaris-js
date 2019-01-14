@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Dataset vector tile</title>
+        <link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css">
+        <style>
+            .map, body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map" class="map"></div>
+        <script type="text/javascript" src="https://cdn.vallaris.space/js/vallaris.js"></script>
+        <script type="text/javascript">
+            var datasetNumer = 18; // Replace with your dataset id
+            var apiKey = 'YOUR_API_KEY'; // Replace with your API Key
+            var setting = {
+                dataset_vector: {
+                    url: 'https://api.vallaris.space/v2/tile/' + datasetNumer + '/{z}/{x}/{y}?key=' + apiKey,
+                    zIndex: 500,
+                    bbox: [100.53309616863756, 14.336137353535094, 100.59018815021939, 14.367512751117786] // Corresponding bbox for dataset
+                }
+            };
+
+            new vallaris.maps.Map(setting);
+        </script>
+    </body>
+</html>

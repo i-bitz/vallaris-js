@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Basemap vector tile</title>
+        <link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css">
+        <style>
+            .map, body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map" class="map"></div>
+        <script type="text/javascript" src="https://cdn.vallaris.space/js/vallaris.js"></script>
+        <script type="text/javascript">
+            var setting = {
+                center: [100.4833, 13.7500],
+                zoom: 6,
+                vector: [
+                    {
+                        "layer_label": "Vallaris Day",
+                        "layer_name": "VallarisDay",
+                        "url": "https://tile.i-bitz.co.th/data/v3/{z}/{x}/{y}.pbf",
+                        "style": "data/VallarisMapStyleDay.json"
+                    },
+                    {
+                        "layer_label": "Vallaris Night",
+                        "layer_name": "VallarisNight",
+                        "url": "https://tile.i-bitz.co.th/data/v3/{z}/{x}/{y}.pbf",
+                        "style": "data/VallarisMapStyleNight.json"
+                    }
+                ]
+            };
+
+            new vallaris.maps.Map(setting);
+        </script>
+    </body>
+</html>

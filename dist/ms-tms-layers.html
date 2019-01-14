@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Map Service TMS Layers</title>
+        <link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css">
+        <style>
+            .map, body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map" class="map"></div>
+        <script type="text/javascript" src="https://cdn.vallaris.space/js/vallaris.js"></script>
+        <script type="text/javascript">
+            var tmsLayers = [
+                {
+                    "layer_label": "Thaichote",
+                    "layer_name": "Thaichote",
+                    "layer_description": "Thaichote",
+                    "service": [
+                        {
+                            "service_name": "TMS",
+                            "service_version": "1.6.0",
+                            "request_type": "GET_MAPTILE",
+                            "request_url": "http://go-tiles1.gistda.or.th/mapproxy/wmts/thaichote/GLOBAL_WEBMERCATOR/{z}/{x}/{y}.png"
+                        }
+                    ]
+                }
+            ];
+
+            var setting = {
+                center: [100.4833, 13.7500],
+                zoom: 6,
+                map_service: {
+                    types: 'TMS',
+                    layers: tmsLayers
+                }
+            };
+
+            new vallaris.maps.Map(setting);
+        </script>
+    </body>
+</html>
