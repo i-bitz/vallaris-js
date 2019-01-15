@@ -25,7 +25,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/atom-one-light.min.css">
-    <title>Vallaris Map JavaScript API Simple Map</title>
+    <title>Vallaris Map JavaScript API Map Service WMS Feature</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-primary"><a class="navbar-brand"><img src="images/vallaris-white.svg" height="30"></a></nav>
@@ -64,8 +64,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col content-container">
-            <h1 class="display-4 text-success">Introduction</h1>
-            <p class="text-muted">Get started with Vallaris JavaScript API, the great set of APIs for building map application, rich data oriented application and Geographical based informative application.</p>
+            <h1 class="display-4 text-success">Feature Info</h1>
+            <p class="text-muted">GetFeatureInfo provides feature information by identifying a point on a map based on its pixel location.</p>
             <div class="card">
               <div class="card-body">
                 <ul class="nav nav-pills mb-3 float-right" id="pills-tab" role="tablist">
@@ -75,15 +75,15 @@
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
                     <div class="clearfix d-md-none"> </div>
-                    <h4 class="card-title text-info">Basemap</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple map example</h6><br>
-                    <p class="card-text">The term basemap is see often in GIS and refers to a collection of GIS data and/or orthorectified imagery that form the background setting for a map. The function of the basemap is to provide background detail necessary to orient the location of the map. Basemaps also add to the aesthetic appeal of a map. A basemap provides a user with context for a map. You can add information to a basemap by overlaying other information on top of it. Basemaps contain reference information that may provide different geospatial information based on what the cartographer is trying to communicate.
+                    <h4 class="card-title text-info">Map service</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Retrieve WMS feature Info</h6><br>
+                    <p class="card-text">The GetFeatureInfo request embeds many of the parameters required in the GetMap request along with parameters specific to querying layers. This example shows how to trigger WMS GetFeatureInfo requests on click for a WMS tile layer.
                       <div class="clearfix">&nbsp;</div>
                       <pre class="border"><code class="html p-3">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta charset="utf-8"&gt;
-        &lt;title&gt;Simple base map&lt;/title&gt;
+        &lt;title&gt;Map Service WMS FeatureInfo&lt;/title&gt;
         &lt;link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css"&gt;
         &lt;style&gt;
             .map, body, html {
@@ -98,9 +98,35 @@
         &lt;div id="map" class="map"&gt;&lt;/div&gt;
         &lt;script type="text/javascript" src="https://cdn.vallaris.space/js/vallaris.js"&gt;&lt;/script&gt;
         &lt;script type="text/javascript"&gt;
+            var wmsLayers = [
+                {
+                    "layer_label": "Administrative Boundary",
+                    "layer_name": "Administrative",
+                    "layer_description": "Administrative Boundary of Thailand",
+                    "service": [
+                        {
+                            "service_name": "WMS",
+                            "service_version": "1.3.0",
+                            "request_type": "GET_MAP",
+                            "request_url": "https://water-s03.gistda.or.th/geoserver/SmallWaterArea/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG:4326&WIDTH=256&HEIGHT=256&FORMAT=image/png&TILED=TRUE&STYLES&LAYERS=Administrative&BBOX=11.050048828125,98.9571533203125,19.491943359375,103.2132568359375"
+                        },
+                        {
+                            "service_name": "WMS",
+                            "service_version": "1.3.0",
+                            "request_type": "GET_INFORMATION",
+                            "request_url": "https://water-s03.gistda.or.th/geoserver/SmallWaterArea/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&CRS=EPSG:4326&FORMAT=image/png&TRANSPARENT=true&INFO_FORMAT=application/json&QUERY_LAYERS=Administrative&STYLES&LAYERS=Administrative&X=50&Y=50&WIDTH=101&HEIGHT=101&BBOX=11.050048828125,98.9571533203125,19.491943359375,103.2132568359375"
+                        }
+                    ]
+                }
+            ];
+
             var setting = {
                 center: [100.4833, 13.7500],
-                zoom: 6
+                zoom: 6,
+                map_service: {
+                    types: 'WMS',
+                    layers: wmsLayers
+                }
             };
 
             new vallaris.maps.Map(setting);
@@ -111,7 +137,7 @@
                   </div>
                   <div class="tab-pane fade" id="pills-output" role="tabpanel" aria-labelledby="pills-output-tab">
                     <h4 class="card-title text-info">Example output</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple base map in load</h6><br>
+                    <h6 class="card-subtitle mb-2 text-muted">WMS feature info in load</h6><br>
                     <div class="map" id="map"></div>
                   </div>
                 </div>
@@ -131,6 +157,6 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="js/example/simple.js"></script>
+    <script src="js/example/ms-wms-feature.js"></script>
   </body>
 </html>

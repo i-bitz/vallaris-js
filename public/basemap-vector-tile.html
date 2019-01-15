@@ -25,7 +25,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/atom-one-light.min.css">
-    <title>Vallaris Map JavaScript API Simple Map</title>
+    <title>Vallaris Map JavaScript API Vector tile</title>
   </head>
   <body>
     <nav class="navbar navbar-light bg-primary"><a class="navbar-brand"><img src="images/vallaris-white.svg" height="30"></a></nav>
@@ -64,8 +64,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col content-container">
-            <h1 class="display-4 text-success">Introduction</h1>
-            <p class="text-muted">Get started with Vallaris JavaScript API, the great set of APIs for building map application, rich data oriented application and Geographical based informative application.</p>
+            <h1 class="display-4 text-success">Vector tile</h1>
+            <p class="text-muted">Vector tiles, tiled vectors or vectiles are packets of geographic data, packaged into pre-defined roughly-square shaped "tiles" for transfer over the web.</p>
             <div class="card">
               <div class="card-body">
                 <ul class="nav nav-pills mb-3 float-right" id="pills-tab" role="tablist">
@@ -76,14 +76,14 @@
                   <div class="tab-pane fade show active" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
                     <div class="clearfix d-md-none"> </div>
                     <h4 class="card-title text-info">Basemap</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple map example</h6><br>
-                    <p class="card-text">The term basemap is see often in GIS and refers to a collection of GIS data and/or orthorectified imagery that form the background setting for a map. The function of the basemap is to provide background detail necessary to orient the location of the map. Basemaps also add to the aesthetic appeal of a map. A basemap provides a user with context for a map. You can add information to a basemap by overlaying other information on top of it. Basemaps contain reference information that may provide different geospatial information based on what the cartographer is trying to communicate.
+                    <h6 class="card-subtitle mb-2 text-muted">Vector tile</h6><br>
+                    <p class="card-text"> Style can be JSON file format so developer can easily create and integrate over Vallaris JavaScript API. Styling can be make as vectors, tiles can be styled when requested, allowing for many map styles on global data, size of vector tiles are really small, enabling global high resolution maps, fast map loads, and efficient caching.
                       <div class="clearfix">&nbsp;</div>
                       <pre class="border"><code class="html p-3">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta charset="utf-8"&gt;
-        &lt;title&gt;Simple base map&lt;/title&gt;
+        &lt;title&gt;Basemap vector tile&lt;/title&gt;
         &lt;link rel="stylesheet" href="https://cdn.vallaris.space/css/vallaris.css"&gt;
         &lt;style&gt;
             .map, body, html {
@@ -100,7 +100,21 @@
         &lt;script type="text/javascript"&gt;
             var setting = {
                 center: [100.4833, 13.7500],
-                zoom: 6
+                zoom: 6,
+                vector: [
+                    {
+                        "layer_label": "Vallaris Day",
+                        "layer_name": "VallarisDay",
+                        "url": "https://tile.i-bitz.co.th/data/v3/{z}/{x}/{y}.pbf",
+                        "style": "https://cdn.vallaris.space/data/VallarisMapStyleDay.json"
+                    },
+                    {
+                        "layer_label": "Vallaris Night",
+                        "layer_name": "VallarisNight",
+                        "url": "https://tile.i-bitz.co.th/data/v3/{z}/{x}/{y}.pbf",
+                        "style": "https://cdn.vallaris.space/data/VallarisMapStyleNight.json"
+                    }
+                ]
             };
 
             new vallaris.maps.Map(setting);
@@ -111,7 +125,7 @@
                   </div>
                   <div class="tab-pane fade" id="pills-output" role="tabpanel" aria-labelledby="pills-output-tab">
                     <h4 class="card-title text-info">Example output</h4>
-                    <h6 class="card-subtitle mb-2 text-muted">Simple base map in load</h6><br>
+                    <h6 class="card-subtitle mb-2 text-muted">Dataset raster tile in load</h6><br>
                     <div class="map" id="map"></div>
                   </div>
                 </div>
@@ -131,6 +145,6 @@
     <script src="js/script.js"></script>
     <script src="js/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="js/example/simple.js"></script>
+    <script src="js/example/basemap-vector-tile.js"></script>
   </body>
 </html>
